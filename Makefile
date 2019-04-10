@@ -5,7 +5,7 @@ VENV_NAME?=venv
 VENV_BIN=$(shell pwd)/${VENV_NAME}/bin
 VENV_ACTIVATE=. ${VENV_BIN}/activate
 
-PYTHON=${VENV_BIN}/python3
+PYTHON=${VENV_BIN}/python
 
 help:
 	@echo "make venv"
@@ -16,7 +16,7 @@ help:
 
 venv: $(VENV_NAME)/bin/activate
 $(VENV_NAME)/bin/activate: setup.py
-	test -d $(VENV_NAME) || virtualenv -p python3 $(VENV_NAME)
+	test -d $(VENV_NAME) || virtualenv $(VENV_NAME)
 	${PYTHON} -m pip install -U pip setuptools
 	${PYTHON} -m pip install -e .[devel]
 	touch $(VENV_NAME)/bin/activate
