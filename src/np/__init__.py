@@ -1,6 +1,7 @@
 import requests
 import yaml
 from pprint import pprint as pp
+import json
 
 class Creds():
     def __init__(self,creds_file="creds.yml"):
@@ -48,13 +49,30 @@ class NeptuneAPI():
         }
 
         r = requests.post(url, data=payload)
-        self.creds.auth = r.cookies["auth"].strip('"')
+        self.creds.auth = r.cookies["auth"]
 
+    def order(self):
+        path = "/trequest/order"
+        url = "https://{0}{1}".format(self.domain, path)
+
+        payload = dict(
+            type="order",
+            order="full_universe_report",
+            version="",
+            game_number="4848663437508608"
+        )
+
+        cookies = {'enwiki_session': '17ab96bd8ffbe8ca58a78657a918558'}
+        cookies = dict(
+            auth=self.creds.auth
+        )
+
+        r = requests.post(url, data=payload, cookies=cookies)
+        return r.text
 
 
 def main():
-    print "writing auth to creds file"
     creds = Creds()
     api = NeptuneAPI(creds)
     api.login()
-    api.creds.dump()
+    print api.order()
