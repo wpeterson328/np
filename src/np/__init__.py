@@ -51,18 +51,13 @@ class NeptuneAPI():
         r = requests.post(url, data=payload)
         self.creds.auth = r.cookies["auth"]
 
-    def order(self):
+    def order(self, payload):
         path = "/trequest/order"
         url = "https://{0}{1}".format(self.domain, path)
 
-        payload = dict(
-            type="order",
-            order="full_universe_report",
-            version="",
-            game_number="4848663437508608"
-        )
+        payload['type'] = "order"
+        payload['version'] = "7"
 
-        cookies = {'enwiki_session': '17ab96bd8ffbe8ca58a78657a918558'}
         cookies = dict(
             auth=self.creds.auth
         )
@@ -70,9 +65,17 @@ class NeptuneAPI():
         r = requests.post(url, data=payload, cookies=cookies)
         return r.text
 
+    def full_universe_report(self, game_number):
+        payload = dict(
+            game_number=game_number,
+            order="full_universe_report"
+        )
+        return self.order(payload)
+
 
 def main():
     creds = Creds()
     api = NeptuneAPI(creds)
     api.login()
-    print api.order()
+    game_number="4848663437508608"
+    print api.full_universe_report(game_number)
