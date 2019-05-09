@@ -2,7 +2,8 @@ from setuptools import find_packages, setup
 
 install_requires = [
     'requests',
-    'pyyaml'
+    'pyyaml',
+    'click'
 ]
 
 
@@ -19,7 +20,7 @@ setup(
     url='https://github.com/wpeterson328/np',
     entry_points={
         'console_scripts': [
-            'np = np:main'
+            'np = np:cli'
         ]
     },
 )
